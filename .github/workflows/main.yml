@@ -3,30 +3,28 @@ on:
     branches:
       - master
 
-
-
 jobs:
   build:
     runs-on: ubuntu-latest
 
-
     steps:
-      - name: 'Test'
-        run: pwd 
-      
-      - name: 'Say Hi'
-        run: echo Hi
+      - name: Current location
+        run: pwd
+
+      - name: 'Saying Hi'
+        run: echo Hi 
 
       - name: 'Checkout repository'
         uses: actions/checkout@v3
-      
+
+      - name: 'Show repository content'
+        run: ls -la
+
       - name: 'Log in to DockerHub'
-        run: docker login --username ${{ secrets.USERNAME }} --password ${{ secrets.TOKEN }}
+        run: echo "${{ secrets.TOKEN }}" | docker login -u "${{ secrets.USERNAME }}" --password-stdin
 
-      - name: 'Build the image'
-        run: docker build -t ${{ secrets.USERNAME }}/yara3 .
+      - name: 'Build the Docker image'
+        run: docker build -t ${{ secrets.USERNAME }}/yara3:latest .
 
-      - name: 'Push the image'
-        run: docker push ${{ secrets.USERNAME }}/yara3
-      
-
+      - name: 'Push the Docker image'
+        run: docker push ${{ secrets.USERNAME }}/yara3:latest
