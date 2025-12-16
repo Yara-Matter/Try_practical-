@@ -1,1 +1,35 @@
+on:
+  push:
+    branches:
+      - master 
 
+
+
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+
+    steps:
+      - name: 'current location'
+        run: pwd
+
+      - name: 'Saying Hi'
+        run: echo Hi yara
+
+      - name: 'Checkout repository'
+        uses: actions/checkout@v3
+
+      - name: 'Showing the content'
+        run: ls
+
+      - name: 'Log in to DockerHub'
+        run: docker login --username ${{ secrets.DOCKER_USERNAME }} --password ${{ secrets.DOCKER_TOKEN }}
+
+      - name: 'Build the image'
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/yara3 .
+
+      - name: 'Push the image to docker'
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/yara3
